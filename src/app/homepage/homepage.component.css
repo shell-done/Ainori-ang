@@ -1,0 +1,78 @@
+#page-top {
+    width: 100%;
+    height: calc(100vh - 60px);
+    position: relative;
+}
+
+img.top-cover {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+#research-block {
+    width: 90%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+    padding: 30px 40px;
+    border-radius: 50px;
+    background: rgba(248, 248, 248, 0.85);
+}
+
+#research-block h1 {
+    font-size: 45px;
+}
+
+.research-body {
+    display: flex;
+    flex-direction: column;
+    width: 90%;
+    margin-top: 75px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.research-body a {
+    color: var(--app-dark-gray);
+    text-decoration: underline;
+    font-size: 17px;
+    cursor: pointer;
+}
+
+.research-body > span {
+    margin-top: 15px;
+}
+
+.research-row {
+    display: flex;
+    justify-content: space-between;
+}
+
+.research-row + .research-row {
+    margin-top: 30px;
+}
+
+.research-widget {
+    display: flex;
+    flex-direction: column;
+    font-size: 25px;
+    width: 25%;
+}
+
+.research-widget input, .research-widget select {
+    font-size: 20px;
+}
+
+.rw-header {
+    display: inline-flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.rw-header img {
+    height: 40px;
+    margin-right: 10px;
+}

@@ -1,0 +1,72 @@
+<div id="page-top">
+    <img src="assets/img/homepage_bg.png" class="top-cover">
+    
+    <div id="research-block">
+        <h1>Trouvez votre <span class="green">covoiturage</span> !</h1>
+        <div class="research-body">
+            <div class="research-row">
+                <div class="research-widget">
+                    <div class="rw-header">
+                        <img src="assets/img/marker_src.png">
+                        <span>Ville de départ</span>
+                    </div>
+                    <select>
+                        <option value="-1" disabled hidden>De</option>
+                        <option *ngFor="let v of villes" value="{{ v.id }}">{{ v.ville }}</option>
+                    </select>
+                </div>
+
+                <div class="research-widget">
+                    <div class="rw-header">
+                        <img src="assets/img/marker_dest.png">
+                        <span>Ville d'arrivée</span>
+                    </div>
+                    <select>
+                        <option value="-1" disabled hidden>À</option>
+                        <option *ngFor="let v of villes" value="{{ v.id }}">{{ v.ville }}</option>
+                    </select>
+                </div>
+
+                <div class="research-widget">
+                    <div class="rw-header">
+                        <img src="assets/img/calendar.png">
+                        <span>Date du trajet</span>
+                    </div>
+                    <input type="date" value="2020-01-02">
+                </div>
+            </div>
+            
+            <div class="research-row" [hidden]="moreParamHidden">
+                <div class="research-widget">
+                    <div class="rw-header">
+                        <img src="assets/img/clock.png">
+                        <span>Heure de départ</span>
+                    </div>
+                    <input type="time" value="06:00">
+                </div>
+
+                <div class="research-widget">
+                    <div class="rw-header">
+                        <img src="assets/img/arrow_circle.png">
+                        <span>Type de trajet</span>
+                    </div>
+                    <select>
+                        <option value="0">Tous</option>
+                        <option *ngFor="let t of typeTrajets" value="{{ t.id }}">{{ t.typeTrajet }}</option>
+                    </select>
+                </div>
+
+                <div class="research-widget">
+                </div>
+            </div>
+
+            <span>
+                <a (click)="displayMoreParam()">{{ moreParamStr }}</a>
+            </span>
+
+            <div class="button-row">
+                <button class="ok">Rechercher</button>
+            </div>
+        </div>
+    </div>
+</div>
