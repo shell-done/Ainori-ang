@@ -1,1 +1,9 @@
 /* You can add global styles to this file, and also import other style files */
+body {
+    --app-black: #282828;      /* Navbar et texte */
+    --app-dark-gray: #707070;  /* Bordures */
+    --app-gray: #F5F5F5;       /* Header des cards */
+    --app-light-gray: #FCFCFC; /* Body des cards */
+    --app-green: #42C439;      /* Vert primaire */
+    --app-red: #A73137;      /* Rouge primaire */
+}
