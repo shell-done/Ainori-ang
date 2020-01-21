@@ -1,0 +1,35 @@
+.navbar {
+    background: var(--app-black);
+    padding-left: 10%;
+    padding-right: 10%;
+}
+
+.navbar .links {
+    display: flex;
+    flex-direction: row;
+}
+
+.links:last-child {
+    margin-right: 0;
+}
+
+.nav-block {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    color: #BDBDBD;
+    font-size: 24px;
+    margin-right: 40px;
+    transition: 0.1s ease-in;
+    cursor: pointer;
+}
+
+.nav-block:hover {
+    color: white;
+}
+
+.profil-pic {
+    height: 45px;
+    border-radius: 50%;;
+    margin-left: 20px;
+}
