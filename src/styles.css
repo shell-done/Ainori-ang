@@ -14,6 +14,10 @@ body {
     color: var(--app-green);
 }
 
+.red {
+    color: var(--app-red);
+}
+
 .button-row {
     width: 100%;
     display: flex;
