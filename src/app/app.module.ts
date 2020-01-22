@@ -9,6 +9,7 @@ import { HomepageComponent } from './homepage/homepage.component';
 import { TrajetComponent } from './trajet/trajet.component';
 import { ProfilepageComponent } from './profilepage/profilepage.component';
 import { CarpoolpageComponent } from './carpoolpage/carpoolpage.component';
+import { FooterComponent } from './footer/footer.component';
 
 @NgModule({
   declarations: [
@@ -17,7 +18,8 @@ import { CarpoolpageComponent } from './carpoolpage/carpoolpage.component';
     HomepageComponent,
     TrajetComponent,
     ProfilepageComponent,
-    CarpoolpageComponent
+    CarpoolpageComponent,
+    FooterComponent
   ],
   imports: [
     BrowserModule,

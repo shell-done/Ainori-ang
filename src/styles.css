@@ -1,13 +1,16 @@
-/* You can add global styles to this file, and also import other style files */
+html, body {
+    height: 100%;
+}
+
 body {
     --app-black: #282828;      /* Navbar et texte */
-    --app-dark-gray: #707070;  /* Bordures */
+    --app-dark-gray: #a5a5a5;  /* Bordures */
     --app-gray: #F5F5F5;       /* Header des cards */
     --app-light-gray: #FCFCFC; /* Body des cards */
     --app-green: #42C439;      /* Vert primaire */
-    --app-dark-green: #2f8a28;
+    --app-dark-green: #2f8a28; /* Vert secondaire (button hover) */
     --app-red: #A73137;        /* Rouge primaire */
-    --app-dark-red: #702125;
+    --app-dark-red: #702125;   /* Rouge secondaire (button hover) */
 }
 
 .green {
@@ -60,4 +63,17 @@ button.ko:hover {
 
 input {
     border: 1px solid #A9A9A9;
+}
+
+.card {
+    border-color: var(--app-dark-gray);
+}
+
+.card-header {
+    border-bottom-color: var(--app-dark-gray);
+    background: var(--app-gray);
+}
+
+.card-body {
+    background: var(--app-light-gray);
 }
