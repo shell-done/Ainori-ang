@@ -7,13 +7,17 @@ import { AppComponent } from './app.component';
 import { NavbarComponent } from './navbar/navbar.component';
 import { HomepageComponent } from './homepage/homepage.component';
 import { TrajetComponent } from './trajet/trajet.component';
+import { ProfilepageComponent } from './profilepage/profilepage.component';
+import { CarpoolpageComponent } from './carpoolpage/carpoolpage.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     NavbarComponent,
     HomepageComponent,
-    TrajetComponent
+    TrajetComponent,
+    ProfilepageComponent,
+    CarpoolpageComponent
   ],
   imports: [
     BrowserModule,
