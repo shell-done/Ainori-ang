@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 
 @Component({
   selector: 'app-trajet',
@@ -6,13 +6,19 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./trajet.component.css']
 })
 export class TrajetComponent implements OnInit {
-  id: number;
+  placeLeftClass: string = "green";
 
-  constructor() { 
-    this.id = 3;
-  }
+  constructor() { }
 
   ngOnInit() {
+    if(this.trajet.nbPlace - this.trajet.placeOccupee > 0)
+      this.placeLeftClass = "green";
+    else
+      this.placeLeftClass = "red";
+    
+    console.log(this.trajet);
   }
+
+  @Input() trajet: any;
 
 }

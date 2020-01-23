@@ -1,5 +1,31 @@
 import { Component, OnInit } from '@angular/core';
+import { formatDate } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
+
+class SearchParams {
+  villeDepart: string = "-1";
+  villeArrivee: string = "-1";
+  dateDepart: string = formatDate(new Date(), "yyyy-MM-dd", "fr");
+  heureDepart: string = "12:00";
+  typeTrajet: string = "0";
+
+  requestParams(addOptionalParam: boolean) : string {
+    let requestStr = "?";
+
+    requestStr += "villeDepart=" + this.villeDepart;
+    requestStr += "&villeArrivee=" + this.villeArrivee;
+    requestStr += "&dateDepart=" + this.dateDepart;
+
+    if(addOptionalParam) {
+      requestStr += "&heureDepart=" + this.heureDepart;
+      
+      if(this.typeTrajet != "0")
+        requestStr += "&typeTrajet=" + this.typeTrajet;
+    }
+
+    return requestStr;
+  }
+}
 
 @Component({
   selector: 'app-homepage',
@@ -12,9 +38,15 @@ export class HomepageComponent implements OnInit {
   villes: any;
   typeTrajets: any;
 
+  searchParams: SearchParams;
+  trajets = {};
+  researchStatus = "BEFORE";
+
   constructor(private http: HttpClient) { }
 
-  ngOnInit() { }
+  ngOnInit() {
+    this.searchParams = new SearchParams();  
+  }
 
   ngAfterViewInit() {
     this.getVilles();
@@ -23,7 +55,6 @@ export class HomepageComponent implements OnInit {
 
   displayMoreParam() {
     this.moreParamHidden = !this.moreParamHidden;
-
     this.moreParamStr = this.moreParamHidden ? "Afficher plus de paramètres" : "Afficher moins de paramètres";
   }
 
@@ -35,8 +66,32 @@ export class HomepageComponent implements OnInit {
 
   getTypeTrajets() {
     this.http.get('http://localhost:8000/api/typetrajets/').subscribe(res => {
-      console.log(res);
         this.typeTrajets = res;
+    });
+  }
+
+  disableResearchButton() {
+    let disable = false;
+
+    if(this.searchParams.villeDepart == "-1")
+      disable = true;
+
+    if(this.searchParams.villeArrivee == "-1")
+      disable = true;
+
+    if(!Date.parse(this.searchParams.dateDepart))
+      disable = true;
+
+    return disable;
+  }
+
+  research() {
+    let requestParams = this.searchParams.requestParams(!this.moreParamHidden);
+    this.researchStatus = "LOADING";
+
+    this.http.get('http://localhost:8000/api/trajets/' + requestParams).subscribe(res => {
+        this.trajets = res;
+        this.researchStatus = "AFTER";
     });
   }
 }

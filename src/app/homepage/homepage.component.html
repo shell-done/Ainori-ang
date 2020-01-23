@@ -3,14 +3,14 @@
     
     <div id="research-block">
         <h1>Trouvez votre <span class="green">covoiturage</span> !</h1>
-        <div class="research-body">
+        <form class="research-body" (ngSubmit)="research()">
             <div class="research-row">
                 <div class="research-widget">
                     <div class="rw-header">
                         <img src="assets/img/marker_src.png">
                         <span>Ville de départ</span>
                     </div>
-                    <select>
+                    <select [ngModel]="searchParams.villeDepart" (ngModelChange)="searchParams.villeDepart = $event" name="villeDepart" required>
                         <option value="-1" disabled hidden>De</option>
                         <option *ngFor="let v of villes" value="{{ v.id }}">{{ v.ville }}</option>
                     </select>
@@ -21,7 +21,7 @@
                         <img src="assets/img/marker_dest.png">
                         <span>Ville d'arrivée</span>
                     </div>
-                    <select>
+                    <select [ngModel]="searchParams.villeArrivee" (ngModelChange)="searchParams.villeArrivee = $event" name="villeArrivee" required>
                         <option value="-1" disabled hidden>À</option>
                         <option *ngFor="let v of villes" value="{{ v.id }}">{{ v.ville }}</option>
                     </select>
@@ -32,7 +32,7 @@
                         <img src="assets/img/calendar.png">
                         <span>Date du trajet</span>
                     </div>
-                    <input type="date" value="2020-01-02">
+                    <input type="date" [ngModel]="searchParams.dateDepart" (ngModelChange)="searchParams.dateDepart = $event" name="dateDepart" required>
                 </div>
             </div>
             
@@ -42,7 +42,7 @@
                         <img src="assets/img/clock.png">
                         <span>Heure de départ</span>
                     </div>
-                    <input type="time" value="06:00">
+                    <input type="time" value="06:00" [ngModel]="searchParams.heureDepart" (ngModelChange)="searchParams.heureDepart = $event" name="heureDepart">
                 </div>
 
                 <div class="research-widget">
@@ -50,7 +50,7 @@
                         <img src="assets/img/arrow_circle.png">
                         <span>Type de trajet</span>
                     </div>
-                    <select>
+                    <select [ngModel]="searchParams.typeTrajet" (ngModelChange)="searchParams.typeTrajet = $event" name="typeTrajet">
                         <option value="0">Tous</option>
                         <option *ngFor="let t of typeTrajets" value="{{ t.id }}">{{ t.typeTrajet }}</option>
                     </select>
@@ -65,13 +65,21 @@
             </span>
 
             <div class="button-row">
-                <button class="ok">Rechercher</button>
+                <button class="ok" type="submit" [disabled]="disableResearchButton()">Rechercher</button>
             </div>
-        </div>
+        </form>
     </div>
 </div>
 
-<div class="container research-results">
+<div class="container loading" [hidden]="researchStatus != 'LOADING'">
+    <img src="assets/img/loading.gif">
+    <span>Chargement en cours...</span>
+</div>
+
+<div class="container research-results" [hidden]="researchStatus != 'AFTER'">
     <h1>Voici les <span class="green">covoiturage</span> disponibles :</h1>
-    <app-trajet></app-trajet>
+    <div *ngIf="trajets.length; else noTrajets">
+        <app-trajet *ngFor="let trajet of trajets" [trajet]="trajet"></app-trajet>
+    </div>
+    <ng-template #noTrajets>Aucun trajet ne correspond à ces critères :(</ng-template>
 </div>

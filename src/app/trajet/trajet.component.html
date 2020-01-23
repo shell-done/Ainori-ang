@@ -4,32 +4,32 @@
             <div class="from-to">
                 <div>
                     <img src="assets/img/marker_src.png">
-                    <span>De <span class="green">Rennes</span></span>
+                    <span>De <span class="green">{{ trajet.villeDepart }}</span></span>
                 </div>
                 <div>
                     <img src="assets/img/marker_dest.png">
-                    <span>À <span class="red">Lille</span></span>
+                    <span>À <span class="red">{{ trajet.villeArrivee }}</span></span>
                 </div>
             </div>
 
             <div class="datetime">
-                <span>Le <span class="green">8 février 2020</span></span>
-                <span>à <span class="red">7h30</span></span>
+                <span>Le <span class="green">{{ trajet.dateDepart.date | date:'dd MMMM yyyy'}}</span></span>
+                <span>à <span class="red">{{ trajet.heureDepart.date | date:'HH'}}h{{ trajet.heureDepart.date | date:'mm'}}</span></span>
             </div>
 
             <div class="places">
-                <span><span class="green">2</span>/3 places</span>
+                <span><span [class]="placeLeftClass">{{ trajet.nbPlace - trajet.placeOccupee }}</span>/{{ trajet.nbPlace }} places</span>
                 <span>restantes</span>
             </div>
         </div>
         <div class="expand">
-            <div data-toggle="collapse" attr.data-target="#trajet-{{ id }}">
+            <div data-toggle="collapse" attr.data-target="#trajet-{{ trajet.id }}">
                 <span>Plus de détails</span>
                 <img src="assets/img/arrow.png">
             </div>
         </div>
     </div>
-    <div id="trajet-{{ id }}" class="collapse" aria-labelledby="heading-example">
+    <div id="trajet-{{ trajet.id }}" class="collapse" aria-labelledby="heading-example">
         <div class="card-body">
             Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon
             officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3
