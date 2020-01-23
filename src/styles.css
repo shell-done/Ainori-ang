@@ -4,13 +4,15 @@ html, body {
 
 body {
     --app-black: #282828;      /* Navbar et texte */
-    --app-dark-gray: #a5a5a5;  /* Bordures */
     --app-gray: #F5F5F5;       /* Header des cards */
+    --app-dark-gray: #a5a5a5;  /* Bordures */
     --app-light-gray: #FCFCFC; /* Body des cards */
     --app-green: #42C439;      /* Vert primaire */
     --app-dark-green: #2f8a28; /* Vert secondaire (button hover) */
+    --app-light-green: #75db6e;/* Vert tertiaire (button disabled) */
     --app-red: #A73137;        /* Rouge primaire */
     --app-dark-red: #702125;   /* Rouge secondaire (button hover) */
+    --app-light-red: #c27377;  /* Rouge tertiaire (button disabled) */
 }
 
 .green {
@@ -53,12 +55,33 @@ button.ok:hover {
     background-color: var(--app-dark-green);
 }
 
+button.ok:disabled {
+    background-color: var(--app-light-green);
+}
+
 button.ko {
     background-color: var(--app-red);
 }
 
 button.ko:hover {
     background-color: var(--app-dark-red);
+}
+
+.loading {
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.loading img {
+    width: 100px;
+    margin: 20px auto;
+}
+
+.loading span {
+    text-align: center;
+    font-size: 22px;
 }
 
 input {
