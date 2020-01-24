@@ -77,7 +77,7 @@
 </div>
 
 <div class="container research-results" [hidden]="researchStatus != 'AFTER'">
-    <h1>Voici les <span class="green">covoiturage</span> disponibles :</h1>
+    <h1>Voici les <span class="green">covoiturages</span> disponibles :</h1>
     <div *ngIf="trajets.length; else noTrajets">
         <app-trajet *ngFor="let trajet of trajets" [trajet]="trajet"></app-trajet>
     </div>
