@@ -1,0 +1,16 @@
+<div class="container main">
+    <h1>Mes <span class="green">trajets</span></h1>
+    <h3>Mes trajets <span class="green">proposés</span></h3>
+    <div class="my-trajets">
+        <div class="loading" [hidden]="researchStatus != 'LOADING'">
+            <img src="assets/img/loading.gif">
+            <span>Chargement en cours...</span>
+        </div>
+        <div *ngIf="trajets.length; else noTrajets">
+            <app-trajet *ngFor="let trajet of trajets" [trajet]="trajet" [mode]="VIEW"></app-trajet>
+        </div>
+        <ng-template #noTrajets>
+            <p class="no-results">Vous n'avez créer aucun trajet pour le moment</p>
+        </ng-template>
+    </div>
+</div>

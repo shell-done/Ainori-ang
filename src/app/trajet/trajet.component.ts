@@ -44,5 +44,5 @@ export class TrajetComponent implements OnInit {
   }
 
   @Input() trajet: any;
-
+  @Input() mode: string;
 }

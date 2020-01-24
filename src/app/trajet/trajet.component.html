@@ -67,12 +67,17 @@
                     </div>
                 </div>
             </div>
-            <div class="button-row">
-                <button class="ok" [disabled]="!hasPlacesLeft" [hidden]="registrationStatus == 'LOADING' || registrationStatus == 'SUCCESS'" (click)="register()">S'inscrire à ce trajet</button>
-                <button class="ok loading-button" [hidden]="registrationStatus != 'LOADING'" disabled>
-                    <img src="assets/img/loading.gif">
-                    <span>Traitement...</span>
-                </button>
+            <div class="button-row" *ngIf="mode != 'VIEW'">
+                <div *ngIf="mode == 'REGISTER'">
+                    <button class="ok" [disabled]="!hasPlacesLeft" [hidden]="registrationStatus == 'LOADING' || registrationStatus == 'SUCCESS'" (click)="register()">S'inscrire à ce trajet</button>
+                    <button class="ok loading-button" [hidden]="registrationStatus != 'LOADING'" disabled>
+                        <img src="assets/img/loading.gif">
+                        <span>Traitement...</span>
+                    </button>
+                </div>
+                <div *ngIf="mode == 'CANCEL'">
+
+                </div>
             </div>
 
             <div class="alert alert-success" role="alert" *ngIf="registrationStatus == 'SUCCESS'">

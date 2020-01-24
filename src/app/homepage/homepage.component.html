@@ -79,7 +79,9 @@
 <div class="container research-results" [hidden]="researchStatus != 'AFTER'">
     <h1>Voici les <span class="green">covoiturages</span> disponibles :</h1>
     <div *ngIf="trajets.length; else noTrajets">
-        <app-trajet *ngFor="let trajet of trajets" [trajet]="trajet"></app-trajet>
+        <app-trajet *ngFor="let trajet of trajets" [trajet]="trajet" [mode]="'REGISTER'"></app-trajet>
     </div>
-    <ng-template #noTrajets>Aucun trajet ne correspond à ces critères :(</ng-template>
+    <ng-template #noTrajets>
+        <p class="no-results">Aucun trajet ne correspond à ces critères :(</p>
+    </ng-template>
 </div>
