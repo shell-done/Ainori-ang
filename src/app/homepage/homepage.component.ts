@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { formatDate } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
+import { environment } from 'src/environments/environment';
 
 class SearchParams {
   villeDepart: string = "-1";
@@ -60,13 +61,13 @@ export class HomepageComponent implements OnInit {
   }
 
   getVilles() {
-    this.http.get('http://localhost:8000/api/villes/').subscribe(res => {
+    this.http.get(environment.apiHost + '/villes/').subscribe(res => {
         this.villes = res;
     });
   }
 
   getTypeTrajets() {
-    this.http.get('http://localhost:8000/api/typetrajets/').subscribe(res => {
+    this.http.get(environment.apiHost + '/typetrajets/').subscribe(res => {
         this.typeTrajets = res;
     });
   }
@@ -90,7 +91,7 @@ export class HomepageComponent implements OnInit {
     let requestParams = this.searchParams.requestParams(!this.moreParamHidden);
     this.researchStatus = "LOADING";
 
-    this.http.get('http://localhost:8000/api/trajets/' + requestParams).subscribe(res => {
+    this.http.get(environment.apiHost + '/trajets/' + requestParams).subscribe(res => {
         this.trajets = res;
         this.researchStatus = "AFTER";
     });

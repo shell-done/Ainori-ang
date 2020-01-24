@@ -1,5 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-trajet',
@@ -29,10 +30,8 @@ export class TrajetComponent implements OnInit {
   }
 
   register() {
-    const uid = 3;
-    
     this.registrationStatus = "LOADING";
-    this.http.post('http://localhost:8000/api/covoiturages/trajets/' + this.trajet.id + '/utilisateurs/' + uid, '').subscribe(
+    this.http.post(environment.apiHost + '/covoiturages/trajets/' + this.trajet.id + '/utilisateurs/' + environment.loggedUserId, '').subscribe(
       res => {
         this.registrationStatus = "SUCCESS";
         this.registrationResponse = res;
