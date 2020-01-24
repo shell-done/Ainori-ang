@@ -31,12 +31,59 @@
     </div>
     <div id="trajet-{{ trajet.id }}" class="collapse" aria-labelledby="heading-example">
         <div class="card-body">
-            Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon
-            officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3
-            wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et.
-            Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan
-            excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt
-            you probably haven't heard of them accusamus labore sustainable VHS.
+            <div class="row">
+                <div class="col-3">
+                    <div class="details">
+                        <h5>Distance</h5>
+                        <span>{{ trajet.nbKm }}km</span>
+                    </div>
+                    <div class="details">
+                        <h5>Durée</h5>
+                        <span>{{ trajet.duree | duree }}</span>
+                    </div>
+                    <div class="details">
+                        <h5>Type de trajet</h5>
+                        <span>{{ trajet.typeTrajet }}</span>
+                    </div>
+                </div>
+                <div class="col-3">
+                    <div class="details">
+                        <h5>Co2 économisé</h5>
+                        <span>{{ trajet.nbKm | co2 }} kg</span>
+                    </div>
+                    <div class="details">
+                        <h5>Véhicule</h5>
+                        <span>{{ trajet.voiture }}</span>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="details">
+                        <h5>Conducteur</h5>
+                        <span>{{ trajet.utilisateur }}</span>
+                    </div>
+                    <div class="details">
+                        <h5>Message du conducteur</h5>
+                        <span>{{ trajet.commentaire | if_empty:'Aucun commentaire' }}</span>
+                    </div>
+                </div>
+            </div>
+            <div class="button-row">
+                <button class="ok" [disabled]="!hasPlacesLeft" [hidden]="registrationStatus == 'LOADING' || registrationStatus == 'SUCCESS'" (click)="register()">S'inscrire à ce trajet</button>
+                <button class="ok loading-button" [hidden]="registrationStatus != 'LOADING'" disabled>
+                    <img src="assets/img/loading.gif">
+                    <span>Traitement...</span>
+                </button>
+            </div>
+
+            <div class="alert alert-success" role="alert" *ngIf="registrationStatus == 'SUCCESS'">
+                Votre inscription pour ce trajet a bien été prise en compte, vous avez permis d'économisé {{ registrationResponse.co2.valCo2 }} kg de Co2 !
+            </div>
+            <div class="alert alert-danger" role="alert" *ngIf="registrationStatus == 'ERROR'">
+                <h6 class="alert-heading">Une ou plusieurs erreurs sont survenues</h6>
+                <ul *ngIf="isArray(registrationResponse)">
+                    <li *ngFor="let err of registrationResponse">{{ err }}</li>
+                </ul>
+            </div>
         </div>
     </div>
 </div>

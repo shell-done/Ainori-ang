@@ -6,6 +6,10 @@ import { FormsModule } from '@angular/forms';
 
 import localeFr from '@angular/common/locales/fr';
 
+import { Co2Pipe } from './pipes/Co2Pipe';
+import { DureePipe } from './pipes/DureePipe';
+import { IfEmptyPipe } from './pipes/IfEmptyPipe';
+
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { NavbarComponent } from './navbar/navbar.component';
@@ -19,6 +23,9 @@ registerLocaleData(localeFr, 'fr');
 
 @NgModule({
   declarations: [
+    Co2Pipe,
+    DureePipe,
+    IfEmptyPipe,
     AppComponent,
     NavbarComponent,
     HomepageComponent,

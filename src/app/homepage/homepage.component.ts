@@ -17,7 +17,8 @@ class SearchParams {
     requestStr += "&dateDepart=" + this.dateDepart;
 
     if(addOptionalParam) {
-      requestStr += "&heureDepart=" + this.heureDepart;
+      if(this.heureDepart)
+        requestStr += "&heureDepart=" + this.heureDepart;
       
       if(this.typeTrajet != "0")
         requestStr += "&typeTrajet=" + this.typeTrajet;
