@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { environment } from 'src/environments/environment';
 
 @Component({
@@ -12,40 +11,52 @@ import { environment } from 'src/environments/environment';
 
 export class ProfilepageComponent implements OnInit {
   utilisateur: any;
+  villes: any;
+  categories: any;
+  vehicules: any;
 
   userForm: FormGroup;
   afficheText: string;
 
-  isEditing = false;
-
-  editingStatus: string = "NONE";
-  editingResponse: any = null;
+  edition: boolean = false;
+  editionStatus: string = "NONE";
+  editionResponse: any = null;
 
   constructor(private fb: FormBuilder, private http: HttpClient) { }
 
   ngOnInit() {
     this.userForm = this.fb.group({
-      nom : this.fb.control('', [Validators.required,
-        Validators.minLength(2)]),
-      prenom : this.fb.control('', [Validators.required,
-        Validators.minLength(2)]),
-      mail : this.fb.control('', [Validators.required,
-        Validators.minLength(2)]),
-      telephone : this.fb.control('', [Validators.required,
-        Validators.minLength(2)]),
-      adresse : this.fb.control('', [Validators.required,
-        Validators.minLength(2)]),
-      ville : this.fb.control('', [Validators.required,
-        Validators.minLength(2)]),
-      categorie : this.fb.control('', [Validators.required,
-        Validators.minLength(2)]),
-      password : this.fb.control('', [Validators.required,
-        Validators.minLength(2)])
-      });
+        nom : this.fb.control('', [Validators.required,
+            Validators.minLength(2),
+            Validators.maxLength(50)]),
+        prenom : this.fb.control('', [Validators.required,
+            Validators.minLength(2),
+            Validators.maxLength(50)]),
+        mail : this.fb.control('', [Validators.required,
+            Validators.email,
+            Validators.maxLength(50)]),
+        telephone : this.fb.control('', [Validators.required,
+            Validators.pattern("/^[0-9]{10}$/"),
+            Validators.minLength(10),
+            Validators.maxLength(10)]),
+        adresse : this.fb.control('', [Validators.required,
+            Validators.minLength(100)]),
+        ville : this.fb.control('', [Validators.required,
+            Validators.minLength(2),
+            Validators.maxLength(50)]),
+        categorie : this.fb.control('', [Validators.required,
+            Validators.minLength(2),
+            Validators.maxLength(50)]),
+        password : this.fb.control('', [Validators.required,
+            Validators.minLength(5)])
+    });
   }
 
   ngAfterViewInit() {
     this.getUtilisateur();
+    this.getPossedeUtilisateur();
+    this.getVilles();
+    this.getCategories();
   }
 
   getUtilisateur() {
@@ -65,9 +76,30 @@ export class ProfilepageComponent implements OnInit {
 
   }
 
-  changeIsEditing(value) {
-    this.isEditing = value;
-    this.editingStatus = 'NONE';
+  getVilles() {
+    this.http.get(environment.apiHost + '/villes/').subscribe(res => {
+        this.villes = res;
+    });
+  }
+
+  getCategories() {
+    this.http.get(environment.apiHost + '/categories/').subscribe(res => {
+        this.categories = res;
+        console.log(this.categories);
+    });
+  }
+
+
+  getPossedeUtilisateur() {
+    this.http.get(environment.apiHost + '/possedes/utilisateurs/' + environment.loggedUserId).subscribe(res => {
+      this.vehicules = res;
+      console.log(this.vehicules);
+    })
+  }
+
+  changeEdition(value) {
+    this.edition = value;
+    this.editionStatus = 'NONE';
   }
 
   isArray(obj : any) {
@@ -82,8 +114,8 @@ export class ProfilepageComponent implements OnInit {
     " / Mail : " + this.userForm.value['mail'] +
     " / Téléphone : " + this.userForm.value['telephone'] +
     " / Adresse : " + this.userForm.value['adresse'] +
-    " / Ville : " + this.userForm.value['ville'] +
-    " / Catégorie : " + this.userForm.value['categorie'] +
+    " / Ville : " + this.userForm.value['ville.ville'] +
+    " / Catégorie : " + this.userForm.value['categorie.categorie'] +
     " / Mot de passe : " + this.userForm.value['password'];
 
     var formData: any = new FormData();
@@ -97,16 +129,20 @@ export class ProfilepageComponent implements OnInit {
     formData.append("categorie", this.userForm.value['categorie']);
     formData.append("password", this.userForm.value['password']);
 
-    this.editingStatus = "LOADING";
-    this.http.post(environment.apiHost + '/utilisateurs/' + environment.loggedUserId, formData).subscribe(
+    this.editionStatus = "LOADING";
+
+    let headers = new HttpHeaders();
+    headers.set('Access-Control-Allow-Origin', '*');
+
+    this.http.post(environment.apiHost + '/utilisateurs/' + environment.loggedUserId, formData, {headers: headers}).subscribe(
       res => {
-        this.editingStatus = "SUCCESS";
-        this.editingResponse = res;
-        this.isEditing = false;
+        this.editionStatus = "SUCCESS";
+        this.editionResponse = res;
+        this.edition = false;
       },
       err => {
-        this.editingStatus = "ERROR";
-        this.editingResponse = err.error;
+        this.editionStatus = "ERROR";
+        this.editionResponse = err.error;
       }
     );
   }

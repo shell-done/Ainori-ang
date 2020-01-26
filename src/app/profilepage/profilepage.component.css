@@ -4,9 +4,21 @@
 
 h1 {
     margin-top: 50px;
-    margin-bottom: 50px;
 }
 
 input {
     font-size: 20px;
+}
+
+.card {
+    margin-top: 50px;
+}
+
+a > img {
+    cursor: pointer;
+}
+
+th > .details {
+    font-weight: normal;
+    text-align: center;
 }
