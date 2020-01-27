@@ -1,1 +1,240 @@
-<p>profilepage works!</p>
+<div class="container">
+    <h1>Mon <span class="green">profil</span></h1>
+
+    <div class="card">
+        <div class="card-header">
+            <div class="info">
+                <h2><span class="green">Mes informations</span></h2>
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="container loading" [hidden]="utilisateur">
+                <img src="assets/img/loading.gif">
+                <span>Chargement en cours...</span>
+            </div>
+            <form [formGroup]="userForm" (ngSubmit)="editing()">
+                <div *ngIf="utilisateur" class="row">
+                    <div class="col-4">
+                        <div class="details">
+                            <h5>Nom</h5>
+                            <span [hidden]='edition'>{{ utilisateur.nom }}</span>
+                            <input [hidden]='!edition' formControlName="nom" value="{{ utilisateur.nom }}">
+                        </div>
+                        <div class="details">
+                            <h5>Prénom</h5>
+                            <span [hidden]='edition'>{{ utilisateur.prenom }}</span>
+                            <input [hidden]='!edition' formControlName="prenom" value="{{ utilisateur.prenom }}">
+                        </div>
+                        <div class="details">
+                            <h5>Email</h5>
+                            <span [hidden]='edition'>{{ utilisateur.mail }}</span>
+                            <input [hidden]='!edition' formControlName="mail" value="{{ utilisateur.mail }}">
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="details">
+                            <h5>Téléphone</h5>
+                            <span [hidden]="edition">{{ utilisateur.telephone }}</span>
+                            <input [hidden]="!edition" formControlName="telephone" value="{{ utilisateur.telephone }}">
+                        </div>
+                        <div class="details">
+                            <h5>Adresse</h5>
+                            <span [hidden]="edition">{{ utilisateur.adresse }}</span>
+                            <input [hidden]="!edition" formControlName="adresse"  value="{{ utilisateur.adresse }}">
+                        </div>
+                        <div class="details">
+                            <h5>Ville</h5>
+                            <span [hidden]="edition">{{ utilisateur.ville.ville }}</span>
+                            <select [hidden]="!edition" formControlName="ville" value="{{ utilisateur.ville.ville }}">
+                                <option value="{{ utilisateur.ville.ville }}" disabled hidden>{{ utilisateur.ville.ville }}</option>
+                                <option *ngFor="let v of villes" value="{{ v.id }}">{{ v.ville }}</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="details">
+                            <h5>Catégorie</h5>
+                            <span [hidden]="edition">{{ utilisateur.categorie.categorie }}</span>
+                            <select [hidden]="!edition" formControlName="categorie" value="{{ utilisateur.categorie.categorie }}">
+                                <option value="{{ utilisateur.categorie.categorie }}" hidden>{{ utilisateur.categorie.categorie }}</option>
+                                <option *ngFor="let c of categories" value="{{ c.id }}">{{ c.categorie }}</option>
+                            </select>
+                        </div>
+                        <div class="details" [hidden]="!edition">
+                            <h5>Mot de passe</h5>
+                            <input formControlName="password">
+                        </div>
+                    </div>
+                    <div class="button-row">
+                        <button type="button" class="ok" [hidden]="edition" (click)="changeEdition(true)">Modifier</button>
+                        <button type="button" class="ko" [hidden]="!edition" (click)="changeEdition(false)">Annuler</button>
+                        <button type="submit" class="ok" [hidden]="!edition || editionStatus == 'LOADING'">Sauvegarder</button>
+                        <button class="ok loading-button" [hidden]="!edition || editionStatus != 'LOADING'" disabled>
+                            <img src="assets/img/loading.gif">
+                            <span>Traitement...</span>
+                        </button>
+                    </div>
+
+                    <div class="alert alert-danger" role="alert" *ngIf="edition && userForm.get('nom').dirty">
+                        <div *ngIf="userForm.get('nom').hasError('required')" class="formerror">
+                            Le nom doit être renseigné
+                        </div>
+                        <div *ngIf="userForm.get('nom').hasError('minlength')" class="formerror">
+                            Le nom doit faire 2 caractères ou plus
+                        </div>
+                        <div *ngIf="userForm.get('nom').hasError('maxlength')" class="formerror">
+                            Le nom doit faire 50 caractères ou moins
+                        </div>
+                    </div>
+                    <div class="alert alert-danger" role="alert" *ngIf="edition && userForm.get('prenom').dirty">
+                        <div *ngIf="userForm.get('prenom').hasError('required')" class="formerror">
+                            Le prénom doit être renseigné
+                        </div>
+                        <div *ngIf="userForm.get('prenom').hasError('minlength')" class="formerror">
+                            Le prénom doit faire 2 caractères ou plus
+                        </div>
+                        <div *ngIf="userForm.get('prenom').hasError('maxlength')" class="formerror">
+                            Le prénom doit faire 50 caractères ou moins
+                        </div>
+                    </div>
+                    <div class="alert alert-danger" role="alert" *ngIf="edition && userForm.get('mail').dirty">
+                        <div *ngIf="userForm.get('mail').hasError('required')" class="formerror">
+                            L'adresse mail doit être renseignée
+                        </div>
+                        <div *ngIf="userForm.get('mail').hasError('email')" class="formerror">
+                            L'adresse mail n'est pas au bon format
+                        </div>
+                        <div *ngIf="userForm.get('mail').hasError('maxlength')" class="formerror">
+                            L'adresse mail doit faire 50 caractères ou moins
+                        </div>
+                    </div>
+                    <div class="alert alert-danger" role="alert" *ngIf="edition && userForm.get('telephone').dirty">
+                        <div *ngIf="userForm.get('telephone').hasError('required')" class="formerror">
+                            Le numéro de téléphone doit être renseigné
+                        </div>
+                        <div *ngIf="userForm.get('telephone').hasError('minlength') || userForm.get('telephone').hasError('maxlength')" class="formerror">
+                            Le numéro de téléphone doit faire 10 caractères
+                        </div>
+                        <div *ngIf="userForm.get('telephone').hasError('pattern')" class="formerror">
+                            Le numéro de téléphone n'est pas au bon format
+                        </div>
+                    </div>
+                    <div class="alert alert-danger" role="alert" *ngIf="edition && userForm.get('adresse').dirty">
+                        <div *ngIf="userForm.get('adresse').hasError('required')" class="formerror">
+                            Le nom doit être renseigné
+                        </div>
+                        <div *ngIf="userForm.get('adresse').hasError('maxlength')" class="formerror">
+                            Le nom doit faire 100 caractères ou moins
+                        </div>
+                    </div>
+                    <div class="alert alert-danger" role="alert" *ngIf="edition && userForm.get('ville').dirty">
+                        <div *ngIf="userForm.get('ville').hasError('required')" class="formerror">
+                            La ville doit être renseignée
+                        </div>
+                        <div *ngIf="userForm.get('ville').hasError('minlength')" class="formerror">
+                            La ville doit faire 2 caractères ou plus
+                        </div>
+                        <div *ngIf="userForm.get('ville').hasError('maxlength')" class="formerror">
+                            La ville doit faire 50 caractères ou moins
+                        </div>
+                    </div>
+                    <div class="alert alert-danger" role="alert" *ngIf="edition && userForm.get('categorie').dirty">
+                        <div *ngIf="userForm.get('categorie').hasError('required')" class="formerror">
+                            La catégorie doit être renseignée
+                        </div>
+                        <div *ngIf="userForm.get('categorie').hasError('minlength')" class="formerror">
+                            La catégorie doit faire 2 caractères ou plus
+                        </div>
+                        <div *ngIf="userForm.get('categorie').hasError('maxlength')" class="formerror">
+                            La catégorie doit faire 50 caractères ou moins
+                        </div>
+                    </div>
+                    <div class="alert alert-danger" role="alert" *ngIf="edition && userForm.get('password').dirty">
+                        <div *ngIf="userForm.get('password').hasError('required')" class="formerror">
+                            Le mot de passe doit être renseigné
+                        </div>
+                        <div *ngIf="userForm.get('password').hasError('minlength')" class="formerror">
+                            Le mot de passe doit faire 5 caractères ou plus
+                        </div>
+                    </div>
+
+                    <div class="alert alert-success" role="alert" *ngIf="editionStatus == 'SUCCESS' && edition">
+                        Vos modifications ont bien été enregistrées !
+                    </div>
+                    <div class="alert alert-danger" role="alert" *ngIf="editionStatus == 'ERROR' && edition">
+                        <h6 class="alert-heading">Une ou plusieurs erreurs sont survenues</h6>
+                        <ul *ngIf="isArray(editionResponse)">
+                            <li *ngFor="let err of editionResponse">{{ err }}</li>
+                        </ul>
+                    </div>
+                </div>
+            </form>
+            <div [hidden]="!edition"> {{ afficheText }}</div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-header">
+            <div class="info">
+                <h2><span class="green">Mes véhicules</span></h2>
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="container loading" [hidden]="utilisateur">
+                <img src="assets/img/loading.gif">
+                <span>Chargement en cours...</span>
+            </div>
+            <table *ngIf="vehicules" class="table">
+                <thead>
+                    <tr>
+                        <th scope="col">
+                            <div class="details">
+                                <h5>Immatriculation</h5>
+                            </div>
+                        </th>
+                        <th scope="col">
+                            <div class="details">
+                                <h5>Modèle</h5>
+                            </div>
+                        </th>
+                        <th scope="col">
+                            <div class="details">
+                                <h5>Marque</h5>
+                            </div>
+                        </th>
+                        <th scope="col">
+                            <div class="details">
+                                <h5>Nombre de places</h5>
+                            </div>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let vehicule of vehicules">
+                        <th scope="col">
+                            <div class="details">
+                                <span>{{ vehicule.immatriculation }}</span>
+                            </div>
+                        </th>
+                        <th scope="col">
+                            <div class="details">
+                                <span>{{ vehicule.voiture.modele }}</span>
+                            </div>
+                        </th>
+                        <th scope="col">
+                            <div class="details">
+                                <span>{{ vehicule.voiture.marque.marque }}</span>
+                            </div>
+                        </th>
+                        <th scope="col">
+                            <div class="details">
+                                <span>{{ vehicule.nbPlace }}</span>
+                            </div>
+                        </th>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</div>
