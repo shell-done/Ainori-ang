@@ -84,3 +84,11 @@ img.top-cover {
 .research-results h1 {
     margin-bottom: 40px;
 }
+
+app-trajet {
+    margin-bottom: 30px;
+}
+
+app-trajet:last-of-type {
+    margin-bottom: 0;
+}

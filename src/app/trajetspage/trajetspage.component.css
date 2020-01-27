@@ -3,6 +3,40 @@
     margin-bottom: 20px;
 }
 
-.my-trajets {
+.my-trajets, .new {
     margin-top: 30px;
+    margin-bottom: 50px;
+}
+
+.card-header h3 {
+    margin-bottom: 0;
+}
+
+.details {
+    font-size: 17px;
+    margin-bottom: 16px;
+}
+
+.details label {
+    font-size: 20px;
+    color: var(--app-black);
+    margin-bottom: 2px;
+}
+
+textarea {
+    resize: none;
+}
+
+.alert {
+    width: 100%;
+    margin-left: 20px;
+    margin-right: 20px;
+}
+
+app-trajet {
+    margin-bottom: 30px;
+}
+
+app-trajet:last-of-type {
+    margin-bottom: 0;
 }

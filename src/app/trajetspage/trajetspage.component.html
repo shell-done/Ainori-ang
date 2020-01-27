@@ -1,5 +1,110 @@
 <div class="container main">
     <h1>Mes <span class="green">trajets</span></h1>
+
+    <div class="card new">
+        <div class="card-header">
+            <h3>Nouveau <span class="green">trajet</span></h3>
+        </div>
+        <div class="loading" *ngIf="newTrajetFieldsReturned != 3; else newTrajet">
+            <img src="assets/img/loading.gif">
+            <span>Chargement en cours...</span>
+        </div>
+        <ng-template #newTrajet>
+        <div class="card-body">
+            <form class="row" (ngSubmit)="createTrajet()" [formGroup]="newTrajetForm">
+                <div class="col-3">
+                    <div class="details">
+                        <label>Ville de départ</label>
+                        <select formControlName="villeDepart">
+                            <option value="-1" disabled hidden>De</option>
+                            <option *ngFor="let v of villes" value="{{ v.id }}">{{ v.ville }}</option>
+                        </select>
+                    </div>
+
+                    <div class="details">
+                        <label>Date de départ</label>
+                        <input type="date" formControlName="dateDepart">
+                    </div>
+
+                    <div class="details">
+                        <label>Durée</label>
+                        <input type="time" formControlName="duree">
+                    </div>
+
+                    <div class="details">
+                        <label>Véhicule</label>
+                        <select formControlName="voiture">
+                            <option *ngIf="voitures.length == 0" value="-1">Vous n'avez aucun véhicule</option>
+                            <option *ngFor="let v of voitures" value="{{ v.id }}">({{ v.immatriculation }}) - {{ v.voiture.marque.marque}} {{ v.voiture.modele }}</option>
+                        </select>
+                    </div>
+
+                    <div class="details">
+                        <label>Type de trajet</label>
+                        <select formControlName="typeTrajet">
+                            <option *ngFor="let t of typeTrajets" value="{{ t.id }}">{{ t.typeTrajet }}</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-3">
+                    <div class="details">
+                        <label>Ville d'arrivée</label>
+                        <select formControlName="villeArrivee">
+                            <option value="-1" disabled hidden>À</option>
+                            <option *ngFor="let v of villes" value="{{ v.id }}">{{ v.ville }}</option>
+                        </select>
+                    </div>
+
+                    <div class="details">
+                        <label>Heure de départ</label>
+                        <input type="time" formControlName="heureDepart">
+                    </div>
+
+                    <div class="details">
+                        <label>Distance (en km)</label>
+                        <input type="number" min="0.01" step="0.05" formControlName="nbKm">
+                    </div>
+
+                    <div class="details">
+                        <label>Nombre de places</label>
+                        <input type="number" min="1" formControlName="nbPlace">
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="details">
+                        <label>Description</label>
+                        <textarea rows="10" formControlName="commentaire"></textarea>
+                    </div>
+                </div>
+
+                <div class="button-row">
+                    <button class="ok" type="submit" *ngIf="creationStatus == 'BEFORE' || creationStatus == 'SUCCESS'">Sauvegarder</button>
+                    <button class="ok loading-button" *ngIf="creationStatus == 'LOADING'" disabled>
+                        <img src="assets/img/loading.gif">
+                        <span>Traitement...</span>
+                    </button>
+                </div>
+
+                <div class="alert alert-danger" role="alert" *ngIf="newTrajetForm.invalid && newTrajetClicked">
+                    <h6 class="alert-heading">Une ou plusieurs erreurs sont présente :</h6>
+                    <ul>
+                        <li *ngFor="let err of newTrajetAngErrors">{{ err }}</li>
+                    </ul>
+                </div>
+                <div class="alert alert-danger" role="alert" *ngIf="newTrajetApiErrors.length">
+                    <h6 class="alert-heading">Une ou plusieurs ont été envoyées par le serveur :</h6>
+                    <ul>
+                        <li *ngFor="let err of newTrajetApiErrors">{{ err }}</li>
+                    </ul>
+                </div>
+                <div class="alert alert-success" role="alert" *ngIf="creationStatus == 'SUCCESS'">
+                    Un nouveau trajet a bien été créé !
+                </div>
+            </form>
+        </div>
+        </ng-template>
+    </div>
+
     <h3>Mes trajets <span class="green">proposés</span></h3>
     <div class="my-trajets">
         <div class="loading" [hidden]="researchStatus != 'LOADING'">

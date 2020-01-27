@@ -1,3 +1,7 @@
+:host {
+    display: block;
+}
+
 .card-header {
     display: flex;
     padding: 0;
