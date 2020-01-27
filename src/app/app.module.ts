@@ -17,7 +17,7 @@ import { HomepageComponent } from './homepage/homepage.component';
 import { TrajetComponent } from './trajet/trajet.component';
 import { ProfilepageComponent } from './profilepage/profilepage.component';
 import { JourneyspageComponent } from './journeyspage/journeyspage.component';
-import { CarpoolpageComponent } from './carpoolpage/carpoolpage.component';
+import { CarpoolspageComponent } from './carpoolspage/carpoolspage.component';
 import { FooterComponent } from './footer/footer.component';
 
 registerLocaleData(localeFr, 'fr');
@@ -33,7 +33,7 @@ registerLocaleData(localeFr, 'fr');
     TrajetComponent,
     ProfilepageComponent,
     JourneyspageComponent,
-    CarpoolpageComponent,
+    CarpoolspageComponent,
     FooterComponent
   ],
   imports: [
