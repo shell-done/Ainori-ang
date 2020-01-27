@@ -16,7 +16,7 @@ import { NavbarComponent } from './navbar/navbar.component';
 import { HomepageComponent } from './homepage/homepage.component';
 import { TrajetComponent } from './trajet/trajet.component';
 import { ProfilepageComponent } from './profilepage/profilepage.component';
-import { TrajetspageComponent } from './trajetspage/trajetspage.component';
+import { JourneyspageComponent } from './journeyspage/journeyspage.component';
 import { CarpoolpageComponent } from './carpoolpage/carpoolpage.component';
 import { FooterComponent } from './footer/footer.component';
 
@@ -32,7 +32,7 @@ registerLocaleData(localeFr, 'fr');
     HomepageComponent,
     TrajetComponent,
     ProfilepageComponent,
-    TrajetspageComponent,
+    JourneyspageComponent,
     CarpoolpageComponent,
     FooterComponent
   ],

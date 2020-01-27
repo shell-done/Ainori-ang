@@ -5,11 +5,11 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { environment } from 'src/environments/environment';
 
 @Component({
-  selector: 'app-trajetspage',
-  templateUrl: './trajetspage.component.html',
-  styleUrls: ['./trajetspage.component.css']
+  selector: 'app-journeyspage',
+  templateUrl: './journeyspage.component.html',
+  styleUrls: ['./journeyspage.component.css']
 })
-export class TrajetspageComponent implements OnInit {
+export class JourneyspageComponent implements OnInit {
   villes: any;
   typeTrajets: any;
   voitures: any;
