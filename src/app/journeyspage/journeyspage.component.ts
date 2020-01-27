@@ -140,7 +140,7 @@ export class JourneyspageComponent implements OnInit {
   getUtilisateurTrajets() {
     this.researchStatus = "LOADING";
 
-    this.http.get(environment.apiHost + '/trajets/utilisateur/' + environment.loggedUserId + "?typeCovoit=Conducteur").subscribe(res => {
+    this.http.get(environment.apiHost + '/trajets/utilisateur/' + environment.loggedUserId).subscribe(res => {
         this.trajets = res;
         this.researchStatus = "AFTER";
     });

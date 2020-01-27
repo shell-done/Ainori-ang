@@ -11,8 +11,11 @@ export class TrajetComponent implements OnInit {
   hasPlacesLeft: boolean = true;
   placeLeftClass: string = "green";
 
-  registrationStatus: string = "NONE";
+  registrationStatus: string = "BEFORE";
   registrationResponse: any = null;
+
+  cancelationStatus: string = "BEFORE";
+  cancelationResponse: any = null;
 
   constructor(private http: HttpClient) { }
 
