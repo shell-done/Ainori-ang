@@ -3,6 +3,7 @@
     
     <div id="research-block">
         <h1>Trouvez votre <span class="green">covoiturage</span> !</h1>
+        <!-- Formulaire de recherche -->
         <form class="research-body" (ngSubmit)="research()">
             <div class="research-row">
                 <div class="research-widget">
@@ -71,13 +72,18 @@
     </div>
 </div>
 
+<!-- Afficher lorsque la requête à l'API n'est pas finie -->
 <div class="container loading" *ngIf="researchStatus == 'WAITING'">
     <img src="assets/img/loading.gif">
     <span>Chargement en cours...</span>
 </div>
 
+<!-- Affiche le résultat de la requête -->
 <div class="container research-results" *ngIf="researchStatus == 'AFTER'">
     <h1>Voici les <span class="green">covoiturages</span> disponibles :</h1>
+    
+    <!-- Génère des component 'trajet' pour afficher les trajets récupérés -->
+    <!-- Le mode register car le component doit proposer l'option de s'enregistrer à ce trajet -->
     <div *ngIf="trajets.length; else noTrajets">
         <app-trajet *ngFor="let trajet of trajets" [trajet]="trajet" [mode]="'REGISTER'"></app-trajet>
     </div>

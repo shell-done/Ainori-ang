@@ -1,3 +1,10 @@
+/**
+ * Fichier du component 'journeyspage'
+ * 
+ * @author Margaux DOUDET <margaux.doudet@isen-ouest.yncrea.fr>
+ * @version 1.0.0
+ */
+
 import { Component, OnInit } from '@angular/core';
 import { formatDate } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
@@ -9,20 +16,24 @@ import { environment } from 'src/environments/environment';
   templateUrl: './journeyspage.component.html',
   styleUrls: ['./journeyspage.component.css']
 })
-export class JourneyspageComponent implements OnInit {
-  villes: any;
-  typeTrajets: any;
-  voitures: any;
-  getRequestCompleted = 0;
 
-  newTrajetForm: FormGroup;
-  newTrajetClicked = false;
-  newTrajetAngErrors = [];
-  newTrajetApiErrors = [];
+/**
+ * Classe du component 'journeyspage' servant à afficher la liste des trajets
+ * créés par l'utilisateur ainsi qu'un formulaire pour en créer d'autres
+ */
+export class JourneyspageComponent implements OnInit {
+  villes: any; // Liste des villes
+  typeTrajets: any; // Liste des typeTrajets
+  voitures: any; // Liste des possede
+  getRequestCompleted = 0; // Nombre de requête GET réussies
+
+  newTrajetForm: FormGroup; // Formulaire de création
+  newTrajetAngErrors = []; // Liste des erreurs renvoyées par angular lors de la création d'un trajet
+  newTrajetApiErrors = []; // Liste des erreurs renvoyées par l'API lors de la création d'un trajet
   
-  trajets: any = {};
-  researchStatus = "BEFORE";
-  creationStatus = "BEFORE";
+  trajets: any = {}; // Liste des trajets
+  researchStatus = "BEFORE"; // Statut de la recherche de trajet (BEFORE, WAITING ou AFTER)
+  creationStatus = "BEFORE"; // Statut de la création de trajet (BEFORE, WAITING ou AFTER)
 
   constructor(private http: HttpClient, private fb: FormBuilder) { }
 
@@ -37,6 +48,9 @@ export class JourneyspageComponent implements OnInit {
     this.getUtilisateurTrajets();
   }
 
+  /**
+   * Récupère la liste des villes
+   */
   getVilles() {
     this.http.get(environment.apiHost + '/villes/').subscribe(res => {
         this.villes = res;
@@ -44,6 +58,9 @@ export class JourneyspageComponent implements OnInit {
     });
   }
 
+  /**
+   * Récupère la liste des typetrajets
+   */
   getTypeTrajets() {
     this.http.get(environment.apiHost + '/typetrajets/').subscribe(res => {
         this.typeTrajets = res;
@@ -51,6 +68,9 @@ export class JourneyspageComponent implements OnInit {
     });
   }
 
+  /**
+   * Récupère la liste des voitures appartenant à un utilisateur
+   */
   getVoitures() {
     this.http.get(environment.apiHost + '/possedes/utilisateur/' + environment.loggedUserId).subscribe(res => {
       this.voitures = res;
@@ -58,6 +78,9 @@ export class JourneyspageComponent implements OnInit {
     });
   }
 
+  /**
+   * Génère le formulaire de création de trajet en y appliquant des validators
+   */
   generateForm() {
     this.newTrajetForm = this.fb.group({
       villeDepart: this.fb.control('-1', [Validators.required, Validators.min(1)]),
@@ -73,6 +96,9 @@ export class JourneyspageComponent implements OnInit {
     });
   }
 
+  /**
+   * Réinitialise le formulaire
+   */
   resetForm() {
     this.newTrajetForm.patchValue({
       villeDepart: '-1',
@@ -87,9 +113,15 @@ export class JourneyspageComponent implements OnInit {
     this.newTrajetAngErrors = [];
   }
 
+  /**
+   * Vérifie le validité du formulaire pour créer un nouveau trajet
+   * S'il n'y a aucune erreur, celui-ci est créé
+   * S'il y a des erreurs (d'angular ou de l'API) celles-ci sont affichées
+   */
   createTrajet() {
     this.newTrajetAngErrors = [];
-    if(this.newTrajetForm.invalid) {     
+    if(this.newTrajetForm.invalid) { 
+      // Récupération des erreurs générées par angular
       Object.keys(this.newTrajetForm.controls).forEach(key => {
         if(this.newTrajetForm.controls[key].hasError('required'))
           this.newTrajetAngErrors.push("Le champ " + key + " doit être renseigné");
@@ -108,6 +140,7 @@ export class JourneyspageComponent implements OnInit {
     formData.append("dateDepart", this.newTrajetForm.value['dateDepart']);
     formData.append("heureDepart", this.newTrajetForm.value['heureDepart']);
 
+    // Transforme la valeur de la durée en nombre flottant
     if(this.newTrajetForm.value['duree']) {
       let timeDuree = this.newTrajetForm.value['duree'].split(':');
       let duree = Number(timeDuree[0])*60 + Number(timeDuree[1])*10/6;
@@ -126,12 +159,14 @@ export class JourneyspageComponent implements OnInit {
 
     this.http.post(environment.apiHost +'/trajets/utilisateur/' + environment.loggedUserId, formData).subscribe(
       res => {
+        // Si le trajet a bien été créé, on affiche un message et on réinitialise le formulaire
         this.creationStatus = "SUCCESS";
         this.resetForm();
         this.newTrajetForm.enable();
         this.getUtilisateurTrajets();
       },
       err => {
+        // En cas d'erreur de l'API, on les affiche
         this.creationStatus = "BEFORE";
         this.newTrajetApiErrors = err.error;
         this.newTrajetForm.enable();
@@ -139,6 +174,9 @@ export class JourneyspageComponent implements OnInit {
     )
   }
 
+  /**
+   * Récupère les trajets créés par un utilisateur
+   */
   getUtilisateurTrajets() {
     this.researchStatus = "WAITING";
 

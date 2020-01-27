@@ -1,4 +1,5 @@
 <div class="card">
+    <!-- Header de la card (informations principales) -->
     <div class="card-header">
         <div class="info">
             <div class="from-to">
@@ -29,6 +30,7 @@
             </div>
         </div>
     </div>
+    <!-- Corp de la card (informations détaillées) -->
     <div id="trajet-{{ trajet.id }}" class="collapse" aria-labelledby="heading-example">
         <div class="card-body">
             <div class="row">
@@ -67,6 +69,7 @@
                     </div>
                 </div>
             </div>
+            <!-- Si on est en mode 'register', on affiche le bouton d'inscription au trajet -->
             <div class="button-row" *ngIf="mode == 'REGISTER'">
                 <button class="ok" [disabled]="!hasPlacesLeft" *ngIf="registrationStatus == 'BEFORE'" (click)="register()">S'inscrire à ce trajet</button>
                 <button class="ok loading-button" *ngIf="registrationStatus == 'WAITING'" disabled>
@@ -75,14 +78,17 @@
                 </button>
             </div>
 
-            <div class="alert alert-success" role="alert" *ngIf="registrationStatus == 'SUCCESS'">
-                Votre inscription pour ce trajet a bien été prise en compte, vous avez permis d'économisé {{ registrationResponse.co2.valCo2 }} kg de Co2 !
-            </div>
+            <!-- Affichage des erreurs du formulaire levées par l'API -->
             <div class="alert alert-danger" role="alert" *ngIf="registrationStatus == 'ERROR'">
                 <h6 class="alert-heading">Une ou plusieurs erreurs sont survenues</h6>
                 <ul *ngIf="registrationErrors.length">
                     <li *ngFor="let err of registrationErrors">{{ err }}</li>
                 </ul>
+            </div>
+
+            <!-- Affichage du message de réussite -->
+            <div class="alert alert-success" role="alert" *ngIf="registrationStatus == 'SUCCESS'">
+                Votre inscription pour ce trajet a bien été prise en compte, vous avez permis d'économisé {{ registrationResponse.co2.valCo2 }} kg de Co2 !
             </div>
         </div>
     </div>

@@ -5,7 +5,7 @@ import { CarpoolspageComponent } from './carpoolspage/carpoolspage.component';
 import { JourneyspageComponent } from './journeyspage/journeyspage.component';
 import { ProfilepageComponent } from './profilepage/profilepage.component';
 
-
+// Définit le nom des différentes routes
 const routes: Routes = [
   { path: '', redirectTo: '/home', pathMatch: 'full' },
   { path: 'home', component: HomepageComponent },

@@ -8,6 +8,7 @@
             </div>
         </div>
         <div class="card-body">
+            <!-- Afficher lorsque les requêtes à l'API nécessaires au formulaire ne sont pas finies -->
             <div class="container loading" *ngIf="getRequestCompleted != 4; else userFormBlock">
                 <img src="assets/img/loading.gif">
                 <span>Chargement en cours...</span>
@@ -65,11 +66,13 @@
                             </div>
                         </div>
                         <div class="button-row">
+                            <!-- Si on est pas au milieu d'une requête, on affiche les boutons liés au mode d'édition -->
                             <div *ngIf="editionStatus != 'WAITING'; else userFormWaiting">
                                 <button type="button" class="ok" *ngIf="!edition" (click)="changeEdition(true)">Modifier</button>
                                 <button type="button" class="ko" *ngIf="edition" (click)="changeEdition(false)">Annuler</button>
                                 <button type="submit" class="ok" *ngIf="edition">Sauvegarder</button>
                             </div>
+                            <!-- Sinon on affiche le bouton de chargement -->
                             <ng-template #userFormWaiting>
                                 <button class="ok loading-button" *ngIf="editionStatus == 'WAITING'" disabled>
                                     <img src="assets/img/loading.gif">
@@ -78,6 +81,7 @@
                             </ng-template>
                         </div>
 
+                        <!-- Affichage des erreurs du formulaire levées par angular -->
                         <div class="alert alert-danger" role="alert" *ngIf="userFormErrors.length">
                             <h6 class="alert-heading">Une ou plusieurs erreurs sont présente :</h6>
                             <ul>
@@ -85,14 +89,17 @@
                             </ul>
                         </div>
 
-                        <div class="alert alert-success" role="alert" *ngIf="editionStatus == 'SUCCESS' && edition">
-                            Vos modifications ont bien été enregistrées !
-                        </div>
+                        <!-- Affichage des erreurs du formulaire levées par l'API -->
                         <div class="alert alert-danger" role="alert" *ngIf="userFormApiErrors.length">
                             <h6 class="alert-heading">Une ou plusieurs erreurs sont survenues</h6>
                             <ul>
                                 <li *ngFor="let err of userFormApiErrors">{{ err }}</li>
                             </ul>
+                        </div>
+
+                        <!-- Affichage du message de réussite -->
+                        <div class="alert alert-success" role="alert" *ngIf="editionStatus == 'SUCCESS' && edition">
+                            Vos modifications ont bien été enregistrées !
                         </div>
                     </div>
                 </form>

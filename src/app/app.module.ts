@@ -20,7 +20,7 @@ import { JourneyspageComponent } from './journeyspage/journeyspage.component';
 import { CarpoolspageComponent } from './carpoolspage/carpoolspage.component';
 import { FooterComponent } from './footer/footer.component';
 
-registerLocaleData(localeFr, 'fr');
+registerLocaleData(localeFr, 'fr'); // Définit la langue locale, utilisé pour l'affichage des mois (January => Janvier)
 
 @NgModule({
   declarations: [
