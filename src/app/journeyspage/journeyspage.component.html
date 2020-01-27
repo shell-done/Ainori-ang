@@ -5,7 +5,7 @@
         <div class="card-header">
             <h3>Nouveau <span class="green">trajet</span></h3>
         </div>
-        <div class="loading" *ngIf="newTrajetFieldsReturned != 3; else newTrajet">
+        <div class="loading" *ngIf="getRequestCompleted != 3; else newTrajet">
             <img src="assets/img/loading.gif">
             <span>Chargement en cours...</span>
         </div>
@@ -79,20 +79,20 @@
 
                 <div class="button-row">
                     <button class="ok" type="submit" *ngIf="creationStatus == 'BEFORE' || creationStatus == 'SUCCESS'">Sauvegarder</button>
-                    <button class="ok loading-button" *ngIf="creationStatus == 'LOADING'" disabled>
+                    <button class="ok loading-button" *ngIf="creationStatus == 'WAITING'" disabled>
                         <img src="assets/img/loading.gif">
                         <span>Traitement...</span>
                     </button>
                 </div>
 
-                <div class="alert alert-danger" role="alert" *ngIf="newTrajetForm.invalid && newTrajetClicked">
+                <div class="alert alert-danger" role="alert" *ngIf="newTrajetAngErrors.length">
                     <h6 class="alert-heading">Une ou plusieurs erreurs sont présente :</h6>
                     <ul>
                         <li *ngFor="let err of newTrajetAngErrors">{{ err }}</li>
                     </ul>
                 </div>
                 <div class="alert alert-danger" role="alert" *ngIf="newTrajetApiErrors.length">
-                    <h6 class="alert-heading">Une ou plusieurs ont été envoyées par le serveur :</h6>
+                    <h6 class="alert-heading">Une ou plusieurs erreurs ont été envoyées par le serveur :</h6>
                     <ul>
                         <li *ngFor="let err of newTrajetApiErrors">{{ err }}</li>
                     </ul>
@@ -107,15 +107,17 @@
 
     <h3>Mes trajets <span class="green">proposés</span></h3>
     <div class="my-trajets">
-        <div class="loading" [hidden]="researchStatus != 'LOADING'">
+        <div class="loading" *ngIf="researchStatus == 'WAITING'">
             <img src="assets/img/loading.gif">
             <span>Chargement en cours...</span>
         </div>
-        <div *ngIf="trajets.length; else noTrajets">
-            <app-trajet *ngFor="let trajet of trajets" [trajet]="trajet" [mode]="'VIEW'"></app-trajet>
+        <div *ngIf="researchStatus == 'AFTER'">
+            <div *ngIf="trajets.length; else noTrajets">
+                <app-trajet *ngFor="let trajet of trajets" [trajet]="trajet" [mode]="'VIEW'"></app-trajet>
+            </div>
+            <ng-template #noTrajets>
+                <p class="no-results">Vous n'avez créer aucun trajet pour le moment</p>
+            </ng-template>
         </div>
-        <ng-template #noTrajets>
-            <p class="no-results">Vous n'avez créer aucun trajet pour le moment</p>
-        </ng-template>
     </div>
 </div>

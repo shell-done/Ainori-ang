@@ -9,31 +9,19 @@ import { environment } from 'src/environments/environment';
 })
 export class TrajetComponent implements OnInit {
   hasPlacesLeft: boolean = true;
-  placeLeftClass: string = "green";
 
   registrationStatus: string = "BEFORE";
-  registrationResponse: any = null;
-
-  cancelationStatus: string = "BEFORE";
-  cancelationResponse: any = null;
+  registrationResponse: any;
+  registrationErrors = [];
 
   constructor(private http: HttpClient) { }
 
   ngOnInit() {
     this.hasPlacesLeft = (this.trajet.nbPlace - this.trajet.placeOccupee > 0);
-
-    if(this.hasPlacesLeft)
-      this.placeLeftClass = "green";
-    else
-      this.placeLeftClass = "red";
-  }
-
-  isArray(obj : any) {
-    return Array.isArray(obj);
   }
 
   register() {
-    this.registrationStatus = "LOADING";
+    this.registrationStatus = "WAITING";
     this.http.post(environment.apiHost + '/covoiturages/trajets/' + this.trajet.id + '/utilisateurs/' + environment.loggedUserId, '').subscribe(
       res => {
         this.registrationStatus = "SUCCESS";
@@ -41,7 +29,7 @@ export class TrajetComponent implements OnInit {
       },
       err => {
         this.registrationStatus = "ERROR";
-        this.registrationResponse = err.error;
+        this.registrationErrors = err.error;
       }
     );
   }

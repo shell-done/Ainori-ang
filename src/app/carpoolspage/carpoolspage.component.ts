@@ -8,7 +8,7 @@ import { environment } from 'src/environments/environment';
   styleUrls: ['./carpoolspage.component.css']
 })
 export class CarpoolspageComponent implements OnInit {
-  researchStatus = "LOADING";
+  researchStatus = "BEFORE";
   covoiturages: any = {};
 
   constructor(private http: HttpClient) { }
@@ -20,6 +20,7 @@ export class CarpoolspageComponent implements OnInit {
   }
 
   getCovoiturages() {
+    this.researchStatus = "WAITING";
     this.http.get(environment.apiHost + '/covoiturages/utilisateur/' + environment.loggedUserId).subscribe(res => {
         this.covoiturages = res;
         this.researchStatus = "AFTER";

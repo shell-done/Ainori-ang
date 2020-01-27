@@ -1,15 +1,17 @@
 <div class="container main">
     <h1>Mes <span class="green">covoiturages</span></h1>
     <div class="my-carpools">
-        <div class="loading" *ngIf="researchStatus == 'LOADING'">
+        <div class="loading" *ngIf="researchStatus == 'WAITING'; else loadingCovoiturages">
             <img src="assets/img/loading.gif">
             <span>Chargement en cours...</span>
         </div>
-        <div *ngIf="covoiturages.length; else noCovoiturages">
-            <app-trajet *ngFor="let covoit of covoiturages" [trajet]="covoit" [mode]="'VIEW'"></app-trajet>
-        </div>
-        <ng-template #noCovoiturages>
-            <p class="no-results">Vous n'ête inscrit à aucun covoiturage pour le moment</p>
+        <ng-template #loadingCovoiturages>
+            <div *ngIf="covoiturages.length; else noCovoiturages">
+                <app-trajet *ngFor="let covoit of covoiturages" [trajet]="covoit" [mode]="'VIEW'"></app-trajet>
+            </div>
+            <ng-template #noCovoiturages>
+                <p class="no-results">Vous n'ête inscrit à aucun covoiturage pour le moment</p>
+            </ng-template>
         </ng-template>
     </div>
 </div>

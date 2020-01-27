@@ -14,11 +14,16 @@ input {
     margin-top: 50px;
 }
 
-a > img {
-    cursor: pointer;
+thead th {
+    font-size: 25px;
 }
 
-th > .details {
-    font-weight: normal;
-    text-align: center;
+tbody td {
+    font-size: 22px;
+    color: var(--app-dark-gray);
+}
+
+.alert {
+    width: 100%;
+    margin-top: 20px;
 }

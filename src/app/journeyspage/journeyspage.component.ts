@@ -13,7 +13,8 @@ export class JourneyspageComponent implements OnInit {
   villes: any;
   typeTrajets: any;
   voitures: any;
-  newTrajetFieldsReturned = 0;
+  getRequestCompleted = 0;
+
   newTrajetForm: FormGroup;
   newTrajetClicked = false;
   newTrajetAngErrors = [];
@@ -39,21 +40,21 @@ export class JourneyspageComponent implements OnInit {
   getVilles() {
     this.http.get(environment.apiHost + '/villes/').subscribe(res => {
         this.villes = res;
-        this.newTrajetFieldsReturned++;
+        this.getRequestCompleted++;
     });
   }
 
   getTypeTrajets() {
     this.http.get(environment.apiHost + '/typetrajets/').subscribe(res => {
         this.typeTrajets = res;
-        this.newTrajetFieldsReturned++;
+        this.getRequestCompleted++;
     });
   }
 
   getVoitures() {
     this.http.get(environment.apiHost + '/possedes/utilisateur/' + environment.loggedUserId).subscribe(res => {
       this.voitures = res;
-      this.newTrajetFieldsReturned++;
+      this.getRequestCompleted++;
     });
   }
 
@@ -81,22 +82,22 @@ export class JourneyspageComponent implements OnInit {
       duree: '',
       nbKm: '1',
       nbPlace: '1',
-      commentaire: '1'
+      commentaire: ''
     });
+    this.newTrajetAngErrors = [];
   }
 
   createTrajet() {
-    if(this.newTrajetForm.invalid) {
-      this.newTrajetAngErrors = [];
+    this.newTrajetAngErrors = [];
+    if(this.newTrajetForm.invalid) {     
       Object.keys(this.newTrajetForm.controls).forEach(key => {
         if(this.newTrajetForm.controls[key].hasError('required'))
-        this.newTrajetAngErrors.push("Le champ " + key + " doit être renseigné");
+          this.newTrajetAngErrors.push("Le champ " + key + " doit être renseigné");
         
         if(this.newTrajetForm.controls[key].hasError('min'))
-        this.newTrajetAngErrors.push("Le champ " + key + " n'est pas valide");
+          this.newTrajetAngErrors.push("Le champ " + key + " n'est pas valide");
       })
 
-      this.newTrajetClicked = true;
       return;
     }
 
@@ -117,8 +118,9 @@ export class JourneyspageComponent implements OnInit {
     formData.append("possede", this.newTrajetForm.value['voiture']);
     formData.append("nbPlace", this.newTrajetForm.value['nbPlace']);
     formData.append("typeTrajet", this.newTrajetForm.value['typeTrajet']);
+    formData.append("commentaire", this.newTrajetForm.value['commentaire']);
 
-    this.creationStatus = "LOADING";
+    this.creationStatus = "WAITING";
     this.newTrajetApiErrors = [];
     this.newTrajetForm.disable();
 
@@ -138,7 +140,7 @@ export class JourneyspageComponent implements OnInit {
   }
 
   getUtilisateurTrajets() {
-    this.researchStatus = "LOADING";
+    this.researchStatus = "WAITING";
 
     this.http.get(environment.apiHost + '/trajets/utilisateur/' + environment.loggedUserId).subscribe(res => {
         this.trajets = res;

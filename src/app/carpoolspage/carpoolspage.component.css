@@ -7,3 +7,11 @@
     margin-top: 30px;
     margin-bottom: 50px;
 }
+
+app-trajet {
+    margin-bottom: 30px;
+}
+
+app-trajet:last-of-type {
+    margin-bottom: 0;
+}

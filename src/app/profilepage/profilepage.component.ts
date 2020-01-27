@@ -14,109 +14,107 @@ export class ProfilepageComponent implements OnInit {
   villes: any;
   categories: any;
   vehicules: any;
+  getRequestCompleted = 0;
 
   userForm: FormGroup;
-  afficheText: string;
+  userFormErrors = [];
+  userFormApiErrors = [];
 
   edition: boolean = false;
-  editionStatus: string = "NONE";
-  editionResponse: any = null;
+  editionStatus: string = "BEFORE";
 
   constructor(private fb: FormBuilder, private http: HttpClient) { }
 
   ngOnInit() {
     this.userForm = this.fb.group({
-        nom : this.fb.control('', [Validators.required,
-            Validators.minLength(2),
-            Validators.maxLength(50)]),
-        prenom : this.fb.control('', [Validators.required,
-            Validators.minLength(2),
-            Validators.maxLength(50)]),
-        mail : this.fb.control('', [Validators.required,
-            Validators.email,
-            Validators.maxLength(50)]),
-        telephone : this.fb.control('', [Validators.required,
-            Validators.pattern("/^[0-9]{10}$/"),
-            Validators.minLength(10),
-            Validators.maxLength(10)]),
-        adresse : this.fb.control('', [Validators.required,
-            Validators.minLength(100)]),
-        ville : this.fb.control('', [Validators.required,
-            Validators.minLength(2),
-            Validators.maxLength(50)]),
-        categorie : this.fb.control('', [Validators.required,
-            Validators.minLength(2),
-            Validators.maxLength(50)]),
-        password : this.fb.control('', [Validators.required,
-            Validators.minLength(5)])
+        nom : this.fb.control('', [Validators.required, Validators.minLength(2), Validators.maxLength(50)]),
+        prenom : this.fb.control('', [Validators.required, Validators.minLength(2), Validators.maxLength(50)]),
+        mail : this.fb.control('', [Validators.required, Validators.email, Validators.maxLength(50)]),
+        telephone : this.fb.control('', [Validators.pattern("^[0-9]{10}$"), Validators.minLength(10), Validators.maxLength(10)]),
+        adresse : this.fb.control('', [Validators.maxLength(100)]),
+        ville : this.fb.control('', [Validators.required]),
+        categorie : this.fb.control('', [Validators.required]),
+        password : this.fb.control('', [Validators.required, Validators.minLength(5)])
     });
   }
 
   ngAfterViewInit() {
-    this.getUtilisateur();
-    this.getPossedeUtilisateur();
     this.getVilles();
     this.getCategories();
+    this.getUtilisateur();
+    this.getPossedeUtilisateur();
   }
 
   getUtilisateur() {
     this.http.get(environment.apiHost + '/utilisateurs/' + environment.loggedUserId).subscribe(res => {
-        this.utilisateur = res;
-
-        this.userForm.patchValue({
-          nom: this.utilisateur.nom,
-          prenom: this.utilisateur.prenom,
-          mail: this.utilisateur.mail,
-          telephone: this.utilisateur.telephone,
-          adresse: this.utilisateur.adresse,
-          ville: this.utilisateur.ville,
-          categorie: this.utilisateur.categorie
-        });
+        this.setUtilisateurValue(res);
+        this.getRequestCompleted++;
     });
+  }
 
+  setUtilisateurValue(utilisateur: any) {
+    this.utilisateur = utilisateur;
+
+    this.userForm.patchValue({
+      nom: this.utilisateur.nom,
+      prenom: this.utilisateur.prenom,
+      mail: this.utilisateur.mail,
+      telephone: this.utilisateur.telephone,
+      adresse: this.utilisateur.adresse,
+      ville: this.utilisateur.ville.id,
+      categorie: this.utilisateur.categorie.id
+    });
   }
 
   getVilles() {
     this.http.get(environment.apiHost + '/villes/').subscribe(res => {
         this.villes = res;
+        this.getRequestCompleted++;
     });
   }
 
   getCategories() {
     this.http.get(environment.apiHost + '/categories/').subscribe(res => {
         this.categories = res;
-        console.log(this.categories);
+        this.getRequestCompleted++;
     });
   }
 
 
   getPossedeUtilisateur() {
-    this.http.get(environment.apiHost + '/possedes/utilisateurs/' + environment.loggedUserId).subscribe(res => {
+    this.http.get(environment.apiHost + '/possedes/utilisateur/' + environment.loggedUserId).subscribe(res => {
       this.vehicules = res;
-      console.log(this.vehicules);
+      this.getRequestCompleted++;
     })
   }
 
   changeEdition(value) {
     this.edition = value;
-    this.editionStatus = 'NONE';
-  }
-
-  isArray(obj : any) {
-    return Array.isArray(obj);
+    this.editionStatus = 'BEFORE';
   }
 
   editing() {
-    //console.log(this.userForm.value);
+    this.userFormErrors = [];
+    if(this.userForm.invalid) {
+      Object.keys(this.userForm.controls).forEach(key => {
+        if(this.userForm.controls[key].hasError('required'))
+          this.userFormErrors.push("Le champ " + key + " doit être renseigné");
+        
+        if(this.userForm.controls[key].hasError('minlength'))
+          this.userFormErrors.push("Le champ " + key + " est trop court (minimum " + this.userForm.controls[key].errors.minlength.requiredLength + " caractères)");
 
-    this.afficheText = "Voici le texte saisi - Nom : " + this.userForm.value['nom'] + 
-    " / Prénom : " + this.userForm.value['prenom'] +
-    " / Mail : " + this.userForm.value['mail'] +
-    " / Téléphone : " + this.userForm.value['telephone'] +
-    " / Adresse : " + this.userForm.value['adresse'] +
-    " / Ville : " + this.userForm.value['ville.ville'] +
-    " / Catégorie : " + this.userForm.value['categorie.categorie'] +
-    " / Mot de passe : " + this.userForm.value['password'];
+        if(this.userForm.controls[key].hasError('maxlength'))
+          this.userFormErrors.push("Le champ " + key + " est trop long (maximum " + this.userForm.controls[key].errors.maxlength.requiredLength + " caractères)");
+
+        if(this.userForm.controls[key].hasError('pattern'))
+          this.userFormErrors.push("Le champ téléphone n'est pas au bon format (10 chiffres)");
+
+        if(this.userForm.controls[key].hasError('email'))
+          this.userFormErrors.push("L'adresse email n'est pas au bon format");
+      })
+
+      return;
+    }
 
     var formData: any = new FormData();
 
@@ -127,22 +125,22 @@ export class ProfilepageComponent implements OnInit {
     formData.append("adresse", this.userForm.value['adresse']);
     formData.append("ville", this.userForm.value['ville']);
     formData.append("categorie", this.userForm.value['categorie']);
-    formData.append("password", this.userForm.value['password']);
+    formData.append("plainPassword", this.userForm.value['password']);
 
-    this.editionStatus = "LOADING";
+    this.editionStatus = "WAITING";
+    this.userForm.disable();
 
-    let headers = new HttpHeaders();
-    headers.set('Access-Control-Allow-Origin', '*');
-
-    this.http.post(environment.apiHost + '/utilisateurs/' + environment.loggedUserId, formData, {headers: headers}).subscribe(
+    this.http.post(environment.apiHost + '/utilisateurs/' + environment.loggedUserId, formData).subscribe(
       res => {
+        this.setUtilisateurValue(res);
         this.editionStatus = "SUCCESS";
-        this.editionResponse = res;
         this.edition = false;
+        this.userForm.enable();
       },
       err => {
-        this.editionStatus = "ERROR";
-        this.editionResponse = err.error;
+        this.editionStatus = "BEFORE";
+        this.userFormApiErrors = err.error;
+        this.userForm.enable();
       }
     );
   }

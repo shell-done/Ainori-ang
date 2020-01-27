@@ -89,7 +89,7 @@ export class HomepageComponent implements OnInit {
 
   research() {
     let requestParams = this.searchParams.requestParams(!this.moreParamHidden);
-    this.researchStatus = "LOADING";
+    this.researchStatus = "WAITING";
 
     this.http.get(environment.apiHost + '/trajets/' + requestParams).subscribe(res => {
         this.trajets = res;

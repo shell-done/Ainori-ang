@@ -18,7 +18,7 @@
             </div>
 
             <div class="places">
-                <span><span [class]="placeLeftClass">{{ trajet.nbPlace - trajet.placeOccupee }}</span>/{{ trajet.nbPlace }} places</span>
+                <span><span [class]="hasPlacesLeft ? 'green' : 'red'">{{ trajet.nbPlace - trajet.placeOccupee }}</span>/{{ trajet.nbPlace }} places</span>
                 <span>restantes</span>
             </div>
         </div>
@@ -67,14 +67,12 @@
                     </div>
                 </div>
             </div>
-            <div class="button-row" *ngIf="mode != 'VIEW'">
-                <div *ngIf="mode == 'REGISTER'">
-                    <button class="ok" [disabled]="!hasPlacesLeft" [hidden]="registrationStatus == 'LOADING' || registrationStatus == 'SUCCESS'" (click)="register()">S'inscrire à ce trajet</button>
-                    <button class="ok loading-button" [hidden]="registrationStatus != 'LOADING'" disabled>
-                        <img src="assets/img/loading.gif">
-                        <span>Traitement...</span>
-                    </button>
-                </div>
+            <div class="button-row" *ngIf="mode == 'REGISTER'">
+                <button class="ok" [disabled]="!hasPlacesLeft" *ngIf="registrationStatus == 'BEFORE'" (click)="register()">S'inscrire à ce trajet</button>
+                <button class="ok loading-button" *ngIf="registrationStatus == 'WAITING'" disabled>
+                    <img src="assets/img/loading.gif">
+                    <span>Traitement...</span>
+                </button>
             </div>
 
             <div class="alert alert-success" role="alert" *ngIf="registrationStatus == 'SUCCESS'">
@@ -82,8 +80,8 @@
             </div>
             <div class="alert alert-danger" role="alert" *ngIf="registrationStatus == 'ERROR'">
                 <h6 class="alert-heading">Une ou plusieurs erreurs sont survenues</h6>
-                <ul *ngIf="isArray(registrationResponse)">
-                    <li *ngFor="let err of registrationResponse">{{ err }}</li>
+                <ul *ngIf="registrationErrors.length">
+                    <li *ngFor="let err of registrationErrors">{{ err }}</li>
                 </ul>
             </div>
         </div>
