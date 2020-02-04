@@ -67,7 +67,7 @@ export class HomepageComponent implements OnInit {
   typeTrajets: any; // Liste des typetrajets
 
   searchParams: SearchParams; // Paramètres de recherche
-  trajets = {}; // Liste des trajets trouvés
+  trajets: any = []; // Liste des trajets trouvés
   researchStatus = "BEFORE"; // Statut de la recherche de trajet (BEFORE, WAITING ou AFTER)
 
   constructor(private http: HttpClient) { }
